@@ -53,7 +53,7 @@ function criar_tipo_eventos() {
         'has_archive'         => true,
         'exclude_from_search' => false,
         'publicly_queryable'  => true,
-        'taxonomies'  		  => array( 'event-category' ),
+        'taxonomies'  		  => array( 'categoria-do-evento' ),
         'capability_type'     => 'post',
         'show_in_rest' 		  => true,
 
@@ -61,7 +61,7 @@ function criar_tipo_eventos() {
 
     // Registra o tipo de dado personalizado
 	register_post_type( 'eventos', $args );
-	register_taxonomy( 'event-category', 'eventos', array('hierarchical'=>true) );
+	register_taxonomy( 'categoria-do-evento', 'eventos', array('hierarchical'=>true) );
 
 }
 // Adiciona a ação na inicialização do tema
@@ -138,6 +138,39 @@ function save_evento_info(){
 add_action("admin_init", "evento_create_meta_box");
 add_action('save_post', 'save_evento_info');
 
+/* Mostra os eventos na página incial */
+function main_query_eventos( $query ) {
+  if ( !is_admin() && $query->is_main_query() && $query->is_home() ) {
+    // Mostra apenas posts do tipo evento
+    $query->set( 'post_type', 'eventos' );
+    
+    // Ordena os eventos por data de início, a mais próxima primeiro
+    $query->set('orderby', 'meta_value');	
+	$query->set('meta_key', 'evento_data_inicio');
+	$query->set('order', 'ASC');
 
+	// Mostra apenas eventos cuja data final é maior que a data atual
+	$query->set( 'meta_query', array(
+      array(
+          'key'     => 'evento_data_fim',
+          'value'   => date("Y-m-d"),
+          'compare' => '>=',
+          'type'    => 'DATE'
+      )
+  	) );
 
-//add_action( '', 'criar_tipo_eventos' );
+  }
+}
+add_action( 'pre_get_posts', 'main_query_eventos' );
+
+/* Adiciona o template single-eventos para exibir um evento */
+function envento_custom_template($single) {
+    global $post;
+    if ( $post->post_type == 'eventos' ) {
+        if ( file_exists( plugin_dir_path( __FILE__ ) . '/single-eventos.php' ) ) {
+            return plugin_dir_path( __FILE__ ) . '/single-eventos.php';
+        }
+    }
+    return $single;
+}
+add_filter('single_template', 'envento_custom_template');
