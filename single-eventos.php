@@ -58,13 +58,13 @@ get_header(); ?>
 
 					<p><span class="font-weight-bold">Data: </span>
 					<?php 
-						$data_inicio = get_post_meta(get_the_ID(),'evento_data_inicio',true);
-						$data_fim = get_post_meta(get_the_ID(),'evento_data_fim',true);
+						$data_inicio = strtotime(get_post_meta(get_the_ID(),'evento_data_inicio',true));
+						$data_fim = strtotime(get_post_meta(get_the_ID(),'evento_data_fim',true));
 						if($data_inicio >= $data_fim) {
-							echo $data_inicio;
+							echo date("d/m/Y",$data_inicio);
 						}
 						else {
-							echo $data_inicio." até ".$data_fim;
+							echo date("d/m/Y",$data_inicio)." até ".date("d/m/Y",$data_fim);
 						}
 					?>
 					<br>
@@ -74,13 +74,13 @@ get_header(); ?>
 						$hora_fim = get_post_meta(get_the_ID(),'evento_hora_fim',true);
 						$dia_inteiro = get_post_meta(get_the_ID(),'evento_dia_inteiro',true);
 						if($dia_inteiro == "true") {
-							echo "Dia inteiro.";
+							echo "O dia inteiro.";
 						}
 						else if($hora_inicio >= $hora_fim) {
 							echo $hora_inicio;
 						}
 						else {
-							echo $hora_inicio." até ".$hora_fim;
+							echo "das ".$hora_inicio." às ".$hora_fim;
 						}
 					?></p>
 
