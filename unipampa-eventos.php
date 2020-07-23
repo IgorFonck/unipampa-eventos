@@ -93,7 +93,7 @@ function evento_meta_options(){
 		<div class="d-inline-block mw-100-form">
 		<input id="evento_data_inicio" class="input-date-form" type="date" required name="evento_data_inicio" value="<?php echo $evento_data_inicio; ?>" />
 		<label for="evento_data_fim"> até </label>
-		<input id="evento_data_fim" class="input-date-form" type="date" required name="evento_data_fim" value="<?php echo $evento_data_fim; ?>" />
+		<input id="evento_data_fim" class="input-date-form" type="date" name="evento_data_fim" value="<?php echo $evento_data_fim; ?>" />
 	</div>
 
 	<br>
@@ -101,27 +101,27 @@ function evento_meta_options(){
 	<div class="d-inline-block mw-100-form">
 		<input id="evento_hora_inicio" class="input-time-form" type="time" required name="evento_hora_inicio" value="<?php echo $evento_hora_inicio; ?>" />
 		<label for="evento_hora_fim"> até </label>
-		<input id="evento_hora_fim" class="input-time-form" type="time" required name="evento_hora_fim" value="<?php echo $evento_hora_fim; ?>" />
+		<input id="evento_hora_fim" class="input-time-form" type="time" name="evento_hora_fim" value="<?php echo $evento_hora_fim; ?>" />
 		<div class="d-inline-block">
-			<input id="evento_dia_inteiro" class="input-checkbox" type="checkbox" name="evento_dia_inteiro" value="true" <?php echo $evento_dia_inteiro=="true" ? "checked":''; ?> />
+			<input id="evento_dia_inteiro" class="input-checkbox" type="checkbox" name="evento_dia_inteiro" value="true" <?php echo $evento_dia_inteiro=="true" ? "checked":''; ?> onchange="diaInteiroCheck(this)" />
 			<label for="evento_dia_inteiro"> dia inteiro? </label>
 		</div>
 	</div>
 
 	<br>
 	<label for="evento_local" class="label-form">Localização: </label>
-	<input id="evento_local_virtual" type="radio" required name="evento_local" value="Virtual" <?php echo $evento_local=="Virtual" ? "checked":''; ?> style="margin:10px 0 10px 10px;" />
-	<label for="evento_local_virtual">Virtual</label>
-	<input id="evento_local_fisico" type="radio" required name="evento_local" value="Físico" <?php echo $evento_local=="Físico"? "checked":''; ?> style="margin:10px 0 10px 10px;" />
+	<input id="evento_local_fisico" type="radio" required name="evento_local" value="Físico" <?php echo $evento_local=="Físico"? "checked":''; ?> style="margin:10px 0 10px 10px;" checked onchange="tipoEventoFisicoChanged(this)" />
 	<label for="evento_local_fisico">Física</label>
+	<input id="evento_local_virtual" type="radio" required name="evento_local" value="Virtual" <?php echo $evento_local=="Virtual" ? "checked":''; ?> style="margin:10px 0 10px 10px;" onchange="tipoEventoVirtualChanged(this)" />
+	<label for="evento_local_virtual">Virtual</label>
 
 	<br>
-	<label for="evento_endereco" class="label-form">Endereço/URL: </label>
-	<input id="evento_endereco" class="input-large-form" type="text" required name="evento_endereco" value="<?php echo $evento_endereco; ?>" />
-
-	<br>
-	<label for="evento_nome_local" class="label-form">Nome do local/texto do link: </label>
+	<label for="evento_nome_local" id="nomeLocalLabel" class="label-form">Nome do local: </label>
 	<input id="evento_nome_local" class="input-large-form" type="text" required name="evento_nome_local" value="<?php echo $evento_nome_local; ?>" />
+	
+	<br>
+	<label for="evento_endereco" id="enderecoLocalLabel" class="label-form">Endereço: </label>
+	<input id="evento_endereco" class="input-large-form" type="text" required name="evento_endereco" value="<?php echo $evento_endereco; ?>" />
 
 	<style type="text/css">
 		.label-form {
@@ -158,6 +158,30 @@ function evento_meta_options(){
 		}
 	</style>
 
+	<script type="text/javascript">
+		function diaInteiroCheck(checkboxElem) {
+		  if (checkboxElem.checked) {
+		    document.getElementById("evento_hora_inicio").required = false;
+		  } else {
+		    document.getElementById("evento_hora_inicio").required = true;
+		  }
+		}
+		function tipoEventoFisicoChanged(radioButtonFisico) {
+		  if (radioButtonFisico.checked) {
+		  	// Evento físico
+		    document.getElementById("nomeLocalLabel").innerHTML = "Nome do local:";
+		    document.getElementById("enderecoLocalLabel").innerHTML = "Endereço:";
+		  }
+		}
+		function tipoEventoVirtualChanged(radioButtonVirtual) {
+		  if (radioButtonVirtual.checked) {
+		  	// Evento virtual
+		    document.getElementById("nomeLocalLabel").innerHTML = "Texto do link:";
+		    document.getElementById("enderecoLocalLabel").innerHTML = "URL:";
+		  }
+		}
+	</script>
+
 	<?php
 }  
 function save_evento_info(){
@@ -166,14 +190,27 @@ function save_evento_info(){
 		global $post;
 		update_post_meta($post->ID, "evento_organizacao", $_POST["evento_organizacao"]);
 		update_post_meta($post->ID, "evento_data_inicio", $_POST["evento_data_inicio"]);
-		update_post_meta($post->ID, "evento_data_fim", $_POST["evento_data_fim"]);
+		
+		if($_POST["evento_data_fim"] != '') {
+			update_post_meta($post->ID, "evento_data_fim", $_POST["evento_data_fim"]);
+		}
+		else {
+			update_post_meta($post->ID, "evento_data_fim", $_POST["evento_data_inicio"]);
+		}
+		
 		update_post_meta($post->ID, "evento_hora_inicio", $_POST["evento_hora_inicio"]);
-		update_post_meta($post->ID, "evento_hora_fim", $_POST["evento_hora_fim"]);
-		$is_dia_inteiro = isset($_POST["evento_dia_inteiro"])?"true":"false";
+
+		if($_POST["evento_hora_fim"] == '' && $_POST["evento_hora_inicio"] != '')
+			update_post_meta($post->ID, "evento_hora_fim", $_POST["evento_hora_inicio"]);
+		else
+			update_post_meta($post->ID, "evento_hora_fim", $_POST["evento_hora_fim"]);
+		
+		$is_dia_inteiro = isset($_POST["evento_dia_inteiro"]) ? "true" : "false";
 		update_post_meta($post->ID, "evento_dia_inteiro", $is_dia_inteiro);
+		
 		update_post_meta($post->ID, "evento_local", $_POST["evento_local"]);
-		update_post_meta($post->ID, "evento_endereco", $_POST["evento_endereco"]);
 		update_post_meta($post->ID, "evento_nome_local", $_POST["evento_nome_local"]);
+		update_post_meta($post->ID, "evento_endereco", $_POST["evento_endereco"]);
 	}
 }
 add_action("admin_init", "evento_create_meta_box");
