@@ -85,37 +85,78 @@ function evento_meta_options(){
 	$evento_nome_local = isset($custom["evento_nome_local"][0])?$custom["evento_nome_local"][0]:'';
 	?>
 	
-	<label for="evento_organizacao">Organização: </label>
-	<input id="evento_organizacao" type="text" required name="evento_organizacao" value="<?php echo $evento_organizacao; ?>" style="width:80%;margin:10px;" />
+	<label for="evento_organizacao" class="label-form">Organização: </label>
+	<input id="evento_organizacao" class="input-large-form" type="text" required name="evento_organizacao" value="<?php echo $evento_organizacao; ?>" />
 
 	<br>
-	<label for="evento_data_inicio">Data: </label>
-	<input id="evento_data_inicio" type="date" required name="evento_data_inicio" value="<?php echo $evento_data_inicio; ?>" style="width:200px;margin:10px;" />
-	<label for="evento_data_fim"> até </label>
-	<input id="evento_data_fim" type="date" required name="evento_data_fim" value="<?php echo $evento_data_fim; ?>" style="width:200px;margin:10px;" />
+	<label for="evento_data_inicio" class="label-form">Data: </label>
+		<div class="d-inline-block mw-100-form">
+		<input id="evento_data_inicio" class="input-date-form" type="date" required name="evento_data_inicio" value="<?php echo $evento_data_inicio; ?>" />
+		<label for="evento_data_fim"> até </label>
+		<input id="evento_data_fim" class="input-date-form" type="date" required name="evento_data_fim" value="<?php echo $evento_data_fim; ?>" />
+	</div>
 
 	<br>
-	<label for="evento_hora_inicio">Hora: </label>
-	<input id="evento_hora_inicio" type="time" required name="evento_hora_inicio" value="<?php echo $evento_hora_inicio; ?>" style="width:200px;margin:10px;" />
-	<label for="evento_hora_fim"> até </label>
-	<input id="evento_hora_fim" type="time" required name="evento_hora_fim" value="<?php echo $evento_hora_fim; ?>" style="width:200px;margin:10px;" />
-	<input id="evento_dia_inteiro" type="checkbox" name="evento_dia_inteiro" value="true" <?php echo $evento_dia_inteiro=="true" ? "checked":''; ?> />
-	<label for="evento_dia_inteiro"> dia inteiro? </label>
+	<label for="evento_hora_inicio" class="label-form">Hora: </label>
+	<div class="d-inline-block mw-100-form">
+		<input id="evento_hora_inicio" class="input-time-form" type="time" required name="evento_hora_inicio" value="<?php echo $evento_hora_inicio; ?>" />
+		<label for="evento_hora_fim"> até </label>
+		<input id="evento_hora_fim" class="input-time-form" type="time" required name="evento_hora_fim" value="<?php echo $evento_hora_fim; ?>" />
+		<div class="d-inline-block">
+			<input id="evento_dia_inteiro" class="input-checkbox" type="checkbox" name="evento_dia_inteiro" value="true" <?php echo $evento_dia_inteiro=="true" ? "checked":''; ?> />
+			<label for="evento_dia_inteiro"> dia inteiro? </label>
+		</div>
+	</div>
 
 	<br>
-	<label for="evento_local">Localização: </label>
+	<label for="evento_local" class="label-form">Localização: </label>
 	<input id="evento_local_virtual" type="radio" required name="evento_local" value="Virtual" <?php echo $evento_local=="Virtual" ? "checked":''; ?> style="margin:10px 0 10px 10px;" />
 	<label for="evento_local_virtual">Virtual</label>
 	<input id="evento_local_fisico" type="radio" required name="evento_local" value="Físico" <?php echo $evento_local=="Físico"? "checked":''; ?> style="margin:10px 0 10px 10px;" />
 	<label for="evento_local_fisico">Física</label>
 
 	<br>
-	<label for="evento_endereco">Endereço/URL: </label>
-	<input id="evento_endereco" type="text" required name="evento_endereco" value="<?php echo $evento_endereco; ?>" style="width:60%;margin:10px;" />
+	<label for="evento_endereco" class="label-form">Endereço/URL: </label>
+	<input id="evento_endereco" class="input-large-form" type="text" required name="evento_endereco" value="<?php echo $evento_endereco; ?>" />
 
 	<br>
-	<label for="evento_nome_local">Nome do local/texto do link: </label>
-	<input id="evento_nome_local" type="text" required name="evento_nome_local" value="<?php echo $evento_nome_local; ?>" style="width:60%;margin:10px;" />
+	<label for="evento_nome_local" class="label-form">Nome do local/texto do link: </label>
+	<input id="evento_nome_local" class="input-large-form" type="text" required name="evento_nome_local" value="<?php echo $evento_nome_local; ?>" />
+
+	<style type="text/css">
+		.label-form {
+		    width: 110px;
+		    display: inline-block;
+		    text-align: right;
+		}
+		.input-large-form {
+			width:calc(100% - 134px);
+			margin:10px;
+		}
+		.input-date-form, .input-time-form {
+			width:160px;
+			margin:10px;
+		}
+		.input-checkbox {
+			margin:10px !important;
+		}
+		.d-inline-block {
+			display: inline-block;
+		}
+		.mw-100-form {
+			max-width:calc(100% - 134px);
+		}
+		@media (max-width: 1149px) {
+			.input-time-form {
+				width:95px;
+			}
+		}
+		@media (max-width: 1049px) {
+			.input-date-form {
+				width:150px;
+			}
+		}
+	</style>
 
 	<?php
 }  
