@@ -236,7 +236,6 @@ function main_query_eventos( $query ) {
           'type'    => 'DATE'
       )
   	) );
-
   }
 }
 add_action( 'pre_get_posts', 'main_query_eventos' );
