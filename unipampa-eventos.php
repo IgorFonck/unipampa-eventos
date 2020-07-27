@@ -251,3 +251,53 @@ function envento_custom_template($single) {
     return $single;
 }
 add_filter('single_template', 'envento_custom_template');
+
+/* Adiciona campos personalizados ao Feed RSS */
+function evento_custom_fields_rss() {
+	/* Organização */
+    if(get_post_type() == 'eventos' && $evento_organizacao = get_post_meta(get_the_ID(), 'evento_organizacao', true)) {
+        ?> <organizacao><?php echo $evento_organizacao ?></organizacao> <?php
+	}
+	
+	/* Data de início */
+    if(get_post_type() == 'eventos' && $evento_data_inicio = get_post_meta(get_the_ID(), 'evento_data_inicio', true)) {
+        ?> <data_inicio><?php echo $evento_data_inicio ?></data_inicio> <?php
+	}
+
+	/* Data final */
+    if(get_post_type() == 'eventos' && $evento_data_fim = get_post_meta(get_the_ID(), 'evento_data_fim', true)) {
+        ?> <data_fim><?php echo $evento_data_fim ?></data_fim> <?php
+	}
+
+	/* Hora de início */
+    if(get_post_type() == 'eventos' && $evento_hora_inicio = get_post_meta(get_the_ID(), 'evento_hora_inicio', true)) {
+        ?> <hora_inicio><?php echo $evento_hora_inicio ?></hora_inicio> <?php
+	}
+	
+	/* Hora final */
+    if(get_post_type() == 'eventos' && $evento_hora_fim = get_post_meta(get_the_ID(), 'evento_hora_fim', true)) {
+        ?> <hora_fim><?php echo $evento_hora_fim ?></hora_fim> <?php
+	}
+
+	/* Dia inteiro */
+    if(get_post_type() == 'eventos' && $evento_dia_inteiro = get_post_meta(get_the_ID(), 'evento_dia_inteiro', true)) {
+        ?> <dia_inteiro><?php echo $evento_dia_inteiro ?></dia_inteiro> <?php
+	}
+
+	/* Tipo de local */
+    if(get_post_type() == 'eventos' && $evento_local = get_post_meta(get_the_ID(), 'evento_local', true)) {
+        ?> <tipo_local><?php echo $evento_local ?></tipo_local> <?php
+	}
+
+	/* Endereço ou URL */
+    if(get_post_type() == 'eventos' && $evento_endereco = get_post_meta(get_the_ID(), 'evento_endereco', true)) {
+        ?> <endereco_ou_url><?php echo $evento_endereco ?></endereco_ou_url> <?php
+	}
+
+	/* Nome do local ou texto do link */
+    if(get_post_type() == 'eventos' && $evento_nome_local = get_post_meta(get_the_ID(), 'evento_nome_local', true)) {
+        ?> <nome_local_ou_texto_link><?php echo $evento_nome_local ?></nome_local_ou_texto_link> <?php
+	}
+
+}
+add_action('rss2_item', 'evento_custom_fields_rss');
