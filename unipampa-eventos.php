@@ -38,7 +38,7 @@ function criar_tipo_eventos() {
 	// Opções
 	$args = array(
 		'label'               => __( 'eventos', 'twentytwenty' ),
-		'description'         => __( 'Eventos para divulgação no portal da Unipampa', 'twentytwenty' ),
+		'description'         => __( 'Eventos publicados no portal da Unipampa.', 'twentytwenty' ),
 		'labels'              => $labels,
 		'supports'            => array( 'title', 'editor', 'author', 'thumbnail'),
         'hierarchical'        => false,
