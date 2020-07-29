@@ -120,7 +120,28 @@ function get_eventos_json() {
 		'numberposts' => -1
 		) 
 	);
-	
+
+	// Categoria e cor
+	$categorias_array = get_terms( array('taxonomy'=>'categoria-do-evento') );
+	$colors = array(
+		'#9C27B0', //roxo 
+		'#EEB500', //amarelo
+		'#03A9F4', //azul
+		'#FF5722', //laranja
+		'#B71C1C', //vermelho
+		'#078358', //verde
+		'#F20C7B', //rosa
+		'#8b5205', //marrom
+		'#51555a', //cinza
+		'#06198d' //azul escuro
+	); 
+	$categ_color_match = array();
+	$cont_colors = 0;
+	foreach ($categorias_array as $categ) :
+		$categ_color_match = array_merge($categ_color_match, array("term-".($categ->term_id) => $colors[$cont_colors]));
+		$cont_colors++;
+	endforeach;
+
 	$count_obj = 0;
 	$eventos_fullcalendar = "[";
 	foreach($eventos_array as $objeto) {
@@ -148,6 +169,9 @@ function get_eventos_json() {
 
 		$evento_url = get_post_permalink($objeto->ID);
 
+		$evento_cat = get_the_terms( $objeto->ID, 'categoria-do-evento' );
+		$term_id = $evento_cat[0]->term_id;
+
 		if($count_obj != 0)
 			$eventos_fullcalendar .= ',';
 
@@ -157,6 +181,7 @@ function get_eventos_json() {
 		$eventos_fullcalendar .= '"start": "'.$resultInicio.'", ';
 		$eventos_fullcalendar .= '"end": "'.$resultFim.'", ';
 		$eventos_fullcalendar .= '"url": "'.$evento_url.'", ';
+		$eventos_fullcalendar .= '"color": "'.$categ_color_match['term-'.$term_id].'", ';
 		$eventos_fullcalendar .= '"allDay": '.$dia_inteiro.' ';
 		$eventos_fullcalendar .= '}';
 		$count_obj++;
