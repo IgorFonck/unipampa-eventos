@@ -13,11 +13,12 @@ if (!defined('MYPLUGIN_PLUGIN_NAME'))
 if (!defined('MYPLUGIN_PLUGIN_URL'))
     define('MYPLUGIN_PLUGIN_URL', WP_PLUGIN_URL . '/' . MYPLUGIN_PLUGIN_NAME);
 
-
-/* Criar o tipo de dados Eventos */
+/*
+* Criar o tipo de dados Eventos.
+*/
 function criar_tipo_eventos() {
 
-// Set UI labels for Custom Post Type
+	// Labels
 	$labels = array(
 		'name'                => _x( 'Eventos', 'Post Type General Name', 'twentytwenty' ),
 		'singular_name'       => _x( 'Evento', 'Post Type Singular Name', 'twentytwenty' ),
@@ -34,8 +35,7 @@ function criar_tipo_eventos() {
 		'not_found_in_trash'  => __( 'Não encontrado na Lixeira', 'twentytwenty' ),
 	);
 
-// Set other options for Custom Post Type
-
+	// Opções
 	$args = array(
 		'label'               => __( 'eventos', 'twentytwenty' ),
 		'description'         => __( 'Eventos para divulgação no portal da Unipampa', 'twentytwenty' ),
@@ -59,7 +59,7 @@ function criar_tipo_eventos() {
 
     );
 
-    // Registra o tipo de dado personalizado
+    // Registra o tipo de dado personalizado e a taxonomia
 	register_post_type( 'eventos', $args );
 	register_taxonomy( 'categoria-do-evento', 'eventos', array('hierarchical'=>true) );
 
@@ -67,8 +67,11 @@ function criar_tipo_eventos() {
 // Adiciona a ação na inicialização do tema
 add_action( 'init', 'criar_tipo_eventos' );
 
-
+/*
+* Adicionar campos personalizados ao formulário do tipo Evento.
+*/
 function evento_create_meta_box(){
+	// Cria a caixa "Informações do evento"
 	add_meta_box("infoEvento-meta", "Informações do evento", "evento_meta_options", "eventos", "normal", "high");
 }  
 function evento_meta_options(){
@@ -85,6 +88,7 @@ function evento_meta_options(){
 	$evento_nome_local = isset($custom["evento_nome_local"][0])?$custom["evento_nome_local"][0]:'';
 	?>
 	
+	<!-- Campos HTML do formulário -->
 	<label for="evento_organizacao" class="label-form">Organização: </label>
 	<input id="evento_organizacao" class="input-large-form" type="text" required name="evento_organizacao" value="<?php echo $evento_organizacao; ?>" />
 
@@ -123,6 +127,7 @@ function evento_meta_options(){
 	<label for="evento_endereco" id="enderecoLocalLabel" class="label-form">Endereço: </label>
 	<input id="evento_endereco" class="input-large-form" type="text" required name="evento_endereco" value="<?php echo $evento_endereco; ?>" />
 
+	<!-- Estilo do formulário -->
 	<style type="text/css">
 		.label-form {
 		    width: 110px;
@@ -158,6 +163,7 @@ function evento_meta_options(){
 		}
 	</style>
 
+	<!-- Script do formulário -->
 	<script type="text/javascript">
 		function diaInteiroCheck(checkboxElem) {
 		  if (checkboxElem.checked) {
@@ -185,6 +191,7 @@ function evento_meta_options(){
 	<?php
 }  
 function save_evento_info(){
+	// Salva os campos personalizados no BD
 	if(empty($_POST)) return;
 	if(isset($_POST["evento_organizacao"])) {
 		global $post;
@@ -216,13 +223,16 @@ function save_evento_info(){
 add_action("admin_init", "evento_create_meta_box");
 add_action('save_post', 'save_evento_info');
 
-/* Mostra os eventos na página incial */
+/* 
+* Altera a consulta principal para mostrar os eventos na página incial.
+*/
 function main_query_eventos( $query ) {
   if ( !is_admin() && $query->is_main_query() && $query->is_home() ) {
-    // Mostra apenas posts do tipo evento
+	
+	// Mostra apenas posts do tipo evento
     $query->set( 'post_type', 'eventos' );
     
-    // Ordena os eventos por data de início, a mais próxima primeiro
+    // Ordena os eventos por data de início, a mais antiga primeiro
     $query->set('orderby', 'meta_value');	
 	$query->set('meta_key', 'evento_data_inicio');
 	$query->set('order', 'ASC');
@@ -240,7 +250,9 @@ function main_query_eventos( $query ) {
 }
 add_action( 'pre_get_posts', 'main_query_eventos' );
 
-/* Adiciona o template single-eventos para exibir um evento */
+/* 
+* Adiciona o template single-eventos para exibir um evento.
+*/
 function envento_custom_template($single) {
     global $post;
     if ( $post->post_type == 'eventos' ) {
@@ -252,49 +264,43 @@ function envento_custom_template($single) {
 }
 add_filter('single_template', 'envento_custom_template');
 
-/* Adiciona campos personalizados ao Feed RSS */
+/* 
+* Adiciona campos personalizados ao Feed RSS.
+*/
 function evento_custom_fields_rss() {
-	/* Organização */
+	// Organização:
     if(get_post_type() == 'eventos' && $evento_organizacao = get_post_meta(get_the_ID(), 'evento_organizacao', true)) {
         ?> <organizacao><?php echo $evento_organizacao ?></organizacao> <?php
 	}
-	
-	/* Data de início */
+	// Data de início:
     if(get_post_type() == 'eventos' && $evento_data_inicio = get_post_meta(get_the_ID(), 'evento_data_inicio', true)) {
         ?> <data_inicio><?php echo $evento_data_inicio ?></data_inicio> <?php
 	}
-
-	/* Data final */
+	// Data final:
     if(get_post_type() == 'eventos' && $evento_data_fim = get_post_meta(get_the_ID(), 'evento_data_fim', true)) {
         ?> <data_fim><?php echo $evento_data_fim ?></data_fim> <?php
 	}
-
-	/* Hora de início */
+	// Hora de início:
     if(get_post_type() == 'eventos' && $evento_hora_inicio = get_post_meta(get_the_ID(), 'evento_hora_inicio', true)) {
         ?> <hora_inicio><?php echo $evento_hora_inicio ?></hora_inicio> <?php
 	}
-	
-	/* Hora final */
+	// Hora final:
     if(get_post_type() == 'eventos' && $evento_hora_fim = get_post_meta(get_the_ID(), 'evento_hora_fim', true)) {
         ?> <hora_fim><?php echo $evento_hora_fim ?></hora_fim> <?php
 	}
-
-	/* Dia inteiro */
+	// Dia inteiro:
     if(get_post_type() == 'eventos' && $evento_dia_inteiro = get_post_meta(get_the_ID(), 'evento_dia_inteiro', true)) {
         ?> <dia_inteiro><?php echo $evento_dia_inteiro ?></dia_inteiro> <?php
 	}
-
-	/* Tipo de local */
+	// Tipo de local:
     if(get_post_type() == 'eventos' && $evento_local = get_post_meta(get_the_ID(), 'evento_local', true)) {
         ?> <tipo_local><?php echo $evento_local ?></tipo_local> <?php
 	}
-
-	/* Endereço ou URL */
+	// Endereço ou URL:
     if(get_post_type() == 'eventos' && $evento_endereco = get_post_meta(get_the_ID(), 'evento_endereco', true)) {
         ?> <endereco_ou_url><?php echo $evento_endereco ?></endereco_ou_url> <?php
 	}
-
-	/* Nome do local ou texto do link */
+	// Nome do local ou texto do link:
     if(get_post_type() == 'eventos' && $evento_nome_local = get_post_meta(get_the_ID(), 'evento_nome_local', true)) {
         ?> <nome_local_ou_texto_link><?php echo $evento_nome_local ?></nome_local_ou_texto_link> <?php
 	}
@@ -302,67 +308,7 @@ function evento_custom_fields_rss() {
 }
 add_action('rss2_item', 'evento_custom_fields_rss');
 
-// Adiciona Fullcalendar
-function fullcalendar_scripts_queue() {
-	//get_eventos_json();
-	// Estilo 
-	wp_enqueue_style( 'fullcalendar-style', plugin_dir_url( __FILE__ ) . 'fullcalendar/main.css' );
-	
-	// Scripts
-	wp_register_script( 'fullcalendar-script', plugin_dir_url( __FILE__ ) . 'fullcalendar/main.js', null, null, true );
-	wp_enqueue_script('fullcalendar-script');
-
-	wp_register_script( 'fullcalendar-init', plugin_dir_url( __FILE__ ) . 'fullcalendar/unipampa-init.js', null, null, true );
-	$eventos_init = array( 'eventosCriados' => get_eventos_json() );
-	wp_localize_script( 'fullcalendar-init', 'eventosInit', $eventos_init );
-	wp_enqueue_script('fullcalendar-init');
-	
-	wp_register_script( 'fullcalendar-locale', plugin_dir_url( __FILE__ ) . 'fullcalendar/locales/pt-br.js', null, null, true );
-	wp_enqueue_script('fullcalendar-locale');
-}
-add_action( 'wp_enqueue_scripts', 'fullcalendar_scripts_queue' );
-
-// Formata JSON de eventos criados
-function get_eventos_json() {
-
-	$eventos_array = get_posts( array('post_type'=>'eventos') );
-	
-	$count_obj = 0;
-	$eventos_fullcalendar = "[";
-	foreach($eventos_array as $objeto) {
-
-		$data_inicio = get_post_meta($objeto->ID, 'evento_data_inicio', true);
-		$data_fim = get_post_meta($objeto->ID, 'evento_data_fim', true);
-		$hora_inicio = get_post_meta($objeto->ID, 'evento_hora_inicio', true);
-		$hora_fim = get_post_meta($objeto->ID, 'evento_hora_fim', true);
-		$dia_inteiro = get_post_meta($objeto->ID, 'evento_dia_inteiro', true);
-		// $data_aux = str_replace('-', '/', $data_fim);
-		// $fim_exc = date('Y-m-d',strtotime($data_aux . "+1 days"));
-
-		$evento_url = get_post_permalink($objeto->ID);
-
-		$combinedInicio = date('Y-m-d H:i:s', strtotime("$data_inicio $hora_inicio"));
-		$combinedFim = date('Y-m-d H:i:s', strtotime("$data_fim $hora_fim"));
-		
-		if($count_obj != 0)
-			$eventos_fullcalendar .= ',';
-
-		$eventos_fullcalendar .= '{';
-		$eventos_fullcalendar .= '"id": "'.$objeto->ID.'", ';
-		$eventos_fullcalendar .= '"title": "'.$objeto->post_title.'", ';
-		$eventos_fullcalendar .= '"start": "'.$combinedInicio.'", ';
-		$eventos_fullcalendar .= '"end": "'.$combinedFim.'", ';
-		// $eventos_fullcalendar .= '"startTime": "'.$combinedInicio.'", ';
-		// $eventos_fullcalendar .= '"endTime": "'.$combinedFim.'", ';
-		$eventos_fullcalendar .= '"url": "'.$evento_url.'", ';
-		$eventos_fullcalendar .= '"allDay": '.$dia_inteiro.' ';
-		$eventos_fullcalendar .= '}';
-		$count_obj++;
-
-	}
-	$eventos_fullcalendar .= "]";
-
-	//echo $eventos_fullcalendar;
-	return $eventos_fullcalendar;
-
-}
+/*
+* Adiciona agenda com o Fullcalendar.
+*/
+require plugin_dir_path( __FILE__ ) . '/unipampa-fullcalendar.php';
