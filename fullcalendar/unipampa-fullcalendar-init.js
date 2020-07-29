@@ -9,17 +9,30 @@ document.addEventListener('DOMContentLoaded', function() {
         initialView: 'dayGridMonth',
         locale: 'pt-br',
         themeSystem: 'bootstrap',
-        /*headerToolbar: {
+        headerToolbar: {
             start: 'prev,next today',
             center: 'title',
-            end: 'dayGridMonth, timeGridWeek'
-        },*/
-        events: eventosJson,
+            end: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
         eventTimeFormat: {
             hour: '2-digit',
             minute: '2-digit',
             meridiem: false
-        }
+        },
+        businessHours: {
+            daysOfWeek: [0,1,2,3,4,5,6],
+            startTime: '08:00',
+            endTime: '18:00',
+        },
+        /* eventDidMount: function (info) {
+            var tooltip = new Tooltip(info.el, {
+                title: info.event.title,
+                placement: 'top',
+                trigger: 'hover',
+                container: 'body'
+            });
+        }, */
+        events: eventosJson
         
     });
 
