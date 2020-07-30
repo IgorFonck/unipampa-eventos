@@ -197,7 +197,7 @@ function get_eventos_json() {
 	}
 	$eventos_fullcalendar .= "]";
 
-	echo $eventos_fullcalendar;
+	//echo $eventos_fullcalendar;
 	return $eventos_fullcalendar;
 
 }
