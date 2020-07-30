@@ -68,6 +68,14 @@ function agenda_pagina() {
         'post_type'     => 'agenda'
 		);
 		wp_insert_post( $pagina_agenda );
+	} else {
+		// Não permite que a página seja alterada
+		$pagina_atualizada = array(
+			'ID'           => $page->ID,
+			'post_content' => '<div id="calendar"></div>',
+			'post_status'   => 'publish'
+		);
+		wp_update_post( $pagina_atualizada );
 	}
 }
 add_action( 'init', 'agenda_pagina' );
@@ -191,5 +199,42 @@ function get_eventos_json() {
 
 	//echo $eventos_fullcalendar;
 	return $eventos_fullcalendar;
+
+}
+
+function get_legenda_cores() {
+
+	// Categoria e cor
+	$categorias_array = get_terms( array('taxonomy'=>'categoria-do-evento') );
+	$colors = array(
+		'#9C27B0', //roxo 
+		'#EEB500', //amarelo
+		'#03A9F4', //azul
+		'#FF5722', //laranja
+		'#B71C1C', //vermelho
+		'#078358', //verde
+		'#F20C7B', //rosa
+		'#8b5205', //marrom
+		'#51555a', //cinza
+		'#06198d' //azul escuro
+	); 
+	$categ_color_match = array();
+	$cont_colors = 0;
+
+	$legenda = "<div class='m-3'><h5>Categorias:</h5>";
+
+	foreach ($categorias_array as $categ) :
+		$categ_color_match = array_merge($categ_color_match, array("term-".($categ->term_id) => $colors[$cont_colors]));
+		//print_r($categ);
+		
+		// Imprime
+		$legenda .= "<a class='d-block text-decoration-none p-1' href='".get_term_link($categ)."'><span style='color:".$colors[$cont_colors]."'>⬤</span> ".$categ->name."</a>";
+		
+		$cont_colors++;
+	endforeach;
+
+	$legenda .= "</div>";
+
+	return $legenda;
 
 }
