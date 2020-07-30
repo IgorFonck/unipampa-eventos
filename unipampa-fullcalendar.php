@@ -185,7 +185,7 @@ function get_eventos_json() {
 
 		$eventos_fullcalendar .= '{';
 		$eventos_fullcalendar .= '"id": "'.$objeto->ID.'", ';
-		$eventos_fullcalendar .= '"title": "'.$objeto->post_title.'", ';
+		$eventos_fullcalendar .= '"title": "'.addslashes($objeto->post_title).'", ';
 		$eventos_fullcalendar .= '"start": "'.$resultInicio.'", ';
 		$eventos_fullcalendar .= '"end": "'.$resultFim.'", ';
 		$eventos_fullcalendar .= '"url": "'.$evento_url.'", ';
@@ -197,7 +197,7 @@ function get_eventos_json() {
 	}
 	$eventos_fullcalendar .= "]";
 
-	//echo $eventos_fullcalendar;
+	echo $eventos_fullcalendar;
 	return $eventos_fullcalendar;
 
 }
