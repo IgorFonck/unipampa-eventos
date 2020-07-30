@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
             center: 'title',
             end: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
+        fixedWeekCount: false,
         eventTimeFormat: {
             hour: '2-digit',
             minute: '2-digit',
