@@ -112,7 +112,7 @@ function fullcalendar_scripts_queue() {
         wp_localize_script( 'fullcalendar-init', 'eventosInit', $eventos_init ); // Passa o JSON de eventos para o script através do parâmetro eventosInit.eventosCriados
         wp_enqueue_script('fullcalendar-init');
         
-        wp_register_script( 'fullcalendar-locale', plugin_dir_url( __FILE__ ) . 'fullcalendar/locales/pt-br.js', null, null, true );
+        wp_register_script( 'fullcalendar-locale', plugin_dir_url( __FILE__ ) . 'fullcalendar/pt-br.js', null, null, true );
         wp_enqueue_script('fullcalendar-locale');
     }
 }
