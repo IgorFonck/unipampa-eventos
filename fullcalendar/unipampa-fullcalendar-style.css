@@ -1,3 +1,11 @@
 table {
     margin: 0 !important;
 }
+
+.fc-day-today {
+    background: #ebf4be !important;
+}
+
+.fc-day-today .fc-daygrid-day-number {
+    font-weight: bold;
+}
