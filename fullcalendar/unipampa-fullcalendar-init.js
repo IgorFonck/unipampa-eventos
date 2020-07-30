@@ -24,16 +24,23 @@ document.addEventListener('DOMContentLoaded', function() {
             startTime: '08:00',
             endTime: '18:00',
         },
-        /* eventDidMount: function (info) {
-            var tooltip = new Tooltip(info.el, {
+        eventDidMount: function (info) {
+            info.el.title = info.event.title;
+            /* var tooltip = new Tooltip(info.el, {
                 title: info.event.title,
                 placement: 'top',
                 trigger: 'hover',
                 container: 'body'
-            });
-        }, */
-        events: eventosJson
-        
+            }); */
+        },
+        events: eventosJson,
+        viewClassNames: function(){
+            var calButtons = document.getElementsByClassName("btn-primary");
+            var i;
+            for (i = 0; i < calButtons.length; i++) {
+                calButtons[i].classList.add("btn-verde-unipampa");
+            }
+        }
     });
 
     calendar.render();
