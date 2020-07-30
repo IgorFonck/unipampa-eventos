@@ -309,6 +309,15 @@ function evento_custom_fields_rss() {
 add_action('rss2_item', 'evento_custom_fields_rss');
 
 /*
+* Posiciona a caixa "Imagem destacada" em posição mais destacada no formulário.
+*/
+function mover_imagem_meta_box(){
+	remove_meta_box( 'postimagediv', 'eventos', 'side' );
+	add_meta_box('postimagediv', __('Featured image'), 'post_thumbnail_meta_box', 'eventos', 'normal', 'high');
+}
+add_action('do_meta_boxes', 'mover_imagem_meta_box');
+
+/*
 * Adiciona agenda com o Fullcalendar.
 */
 require plugin_dir_path( __FILE__ ) . '/unipampa-fullcalendar.php';
