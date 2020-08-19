@@ -30,7 +30,6 @@ get_header(); ?>
 					if ( 'eventos' === get_post_type() ) : ?>
 					<div class="entry-meta small posted-on">
 						<?php 
-						wp_bootstrap_starter_posted_on();
 						$terms = get_the_terms( get_the_ID(), 'categoria-do-evento' );
 						$terms_cont = 0;
 						if(!empty($terms)) {
@@ -39,7 +38,7 @@ get_header(); ?>
 							    if ( is_wp_error( $term_link ) ) {
 							        continue;
 							    }
-							    echo $terms_cont == 0 ? " | Categorias: " : ", ";
+							    echo $terms_cont == 0 ? "Publicado na categoria: " : ", ";
 							    echo '<a href="' . esc_url( $term_link ) . '">' . $term->name . '</a>';
 							    $terms_cont++;
 							} 
