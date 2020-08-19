@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
         initialView: 'dayGridMonth',
         locale: 'pt-br',
         themeSystem: 'bootstrap',
+        height: 'auto',
         headerToolbar: {
             start: 'prev,next today',
             center: 'title',
