@@ -45,7 +45,7 @@ function criar_tipo_agenda() {
 
     );
 
-    // Registra o tipo de dado personalizado e a taxonomia
+    // Registra o tipo de dado personalizado
 	register_post_type( 'agenda', $args );
 
 }
@@ -95,7 +95,7 @@ function agenda_custom_template($single) {
 add_filter('single_template', 'agenda_custom_template');
 
 /* 
-* Adiciona Fullcalendar apenas na página de agenda.
+* Adiciona script e estilo do Fullcalendar apenas na página de agenda.
 */
 function fullcalendar_scripts_queue() {
     if( is_single() && get_post_type() == 'agenda' ) {
@@ -132,16 +132,16 @@ function get_eventos_json() {
 	// Categoria e cor
 	$categorias_array = get_terms( array('taxonomy'=>'categoria-do-evento') );
 	$colors = array(
-		'#9C27B0', //roxo 
-		'#EEB500', //amarelo
 		'#03A9F4', //azul
 		'#FF5722', //laranja
 		'#B71C1C', //vermelho
+		'#9C27B0', //roxo 
+		'#EEB500', //amarelo
 		'#078358', //verde
 		'#F20C7B', //rosa
 		'#8b5205', //marrom
 		'#51555a', //cinza
-		'#06198d' //azul escuro
+		'#06198d', //azul escuro
 	); 
 	$categ_color_match = array();
 	$cont_colors = 0;
@@ -202,21 +202,24 @@ function get_eventos_json() {
 
 }
 
+/*
+* Imprime a legenda de cores da agenda.
+*/
 function get_legenda_cores() {
 
 	// Categoria e cor
 	$categorias_array = get_terms( array('taxonomy'=>'categoria-do-evento') );
 	$colors = array(
-		'#9C27B0', //roxo 
-		'#EEB500', //amarelo
 		'#03A9F4', //azul
 		'#FF5722', //laranja
 		'#B71C1C', //vermelho
+		'#9C27B0', //roxo 
+		'#EEB500', //amarelo
 		'#078358', //verde
 		'#F20C7B', //rosa
 		'#8b5205', //marrom
 		'#51555a', //cinza
-		'#06198d' //azul escuro
+		'#06198d', //azul escuro
 	); 
 	$categ_color_match = array();
 	$cont_colors = 0;
