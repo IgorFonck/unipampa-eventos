@@ -309,6 +309,30 @@ function evento_custom_fields_rss() {
 add_action('rss2_item', 'evento_custom_fields_rss');
 
 /*
+* Ordem personalizada no Feed RSS.
+*/
+function feed_rss_query_eventos( $query ) {
+    if ($query->is_feed) {
+        // Ordena os eventos por data de início, a mais antiga primeiro
+		$query->set('orderby', 'meta_value');	
+		$query->set('meta_key', 'evento_data_inicio');
+		$query->set('order', 'ASC');
+
+		// Mostra apenas eventos cuja data final é maior que a data atual
+		$query->set( 'meta_query', array(
+			array(
+				'key'     => 'evento_data_fim',
+				'value'   => date("Y-m-d"),
+				'compare' => '>=',
+				'type'    => 'DATE'
+			)
+		) );
+	}
+    return $query;
+}
+add_filter('pre_get_posts','feed_rss_query_eventos');
+
+/*
 * Posiciona a caixa "Imagem destacada" em posição mais destacada no formulário.
 */
 function mover_imagem_meta_box(){
