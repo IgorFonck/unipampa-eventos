@@ -9,3 +9,7 @@ table {
 .fc-day-today .fc-daygrid-day-number {
     font-weight: bold;
 }
+
+.fc-direction-ltr .fc-daygrid-event .fc-event-time {
+    min-width: 36px;
+}
