@@ -176,14 +176,16 @@ function evento_meta_options(){
 		  if (radioButtonFisico.checked) {
 		  	// Evento físico
 		    document.getElementById("nomeLocalLabel").innerHTML = "Nome do local:";
-		    document.getElementById("enderecoLocalLabel").innerHTML = "Endereço:";
+			document.getElementById("enderecoLocalLabel").innerHTML = "Endereço:";
+			document.getElementById("evento_endereco").type = 'text';
 		  }
 		}
 		function tipoEventoVirtualChanged(radioButtonVirtual) {
 		  if (radioButtonVirtual.checked) {
 		  	// Evento virtual
 		    document.getElementById("nomeLocalLabel").innerHTML = "Texto do link:";
-		    document.getElementById("enderecoLocalLabel").innerHTML = "URL:";
+			document.getElementById("enderecoLocalLabel").innerHTML = "URL:";
+			document.getElementById("evento_endereco").type = 'url';
 		  }
 		}
 	</script>
