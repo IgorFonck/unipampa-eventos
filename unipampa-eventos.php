@@ -120,12 +120,12 @@ function evento_meta_options(){
 	<label for="evento_local_virtual">Virtual</label>
 
 	<br>
-	<label for="evento_nome_local" id="nomeLocalLabel" class="label-form">Nome do local: </label>
+	<label for="evento_nome_local" id="nomeLocalLabel" class="label-form"><?php echo ($evento_local == "Virtual") ? 'Texto do link: ' : 'Nome do local: '; ?></label>
 	<input id="evento_nome_local" class="input-large-form" type="text" required name="evento_nome_local" value="<?php echo $evento_nome_local; ?>" />
 	
 	<br>
-	<label for="evento_endereco" id="enderecoLocalLabel" class="label-form">Endereço: </label>
-	<input id="evento_endereco" class="input-large-form" type="text" required name="evento_endereco" value="<?php echo $evento_endereco; ?>" />
+	<label for="evento_endereco" id="enderecoLocalLabel" class="label-form"><?php echo ($evento_local == "Virtual") ? 'URL: ' : 'Endereço: '; ?></label>
+	<input id="evento_endereco" class="input-large-form" type="<?php echo ($evento_local == "Virtual") ? 'url' : 'text'; ?>" required name="evento_endereco" value="<?php echo $evento_endereco; ?>" />
 
 	<!-- Estilo do formulário -->
 	<style type="text/css">
